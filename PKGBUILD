@@ -4,6 +4,7 @@
 # Contributor: Konstantin Gizdov <arch@kge.pw>
 # Contributor: Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
 # Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Pellegrino Prevete <pellegrinoprevete@gmail.com>
 
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
