@@ -168,6 +168,7 @@ package_gcc7() {
   pkgdesc="The GNU Compiler Collection - C and C++ frontends (7.x.x)"
   depends=("gcc7-libs=$pkgver-$pkgrel" 'binutils>=2.28' libmpc)
   options+=(staticlibs)
+  provides=("gcc")
 
   export LD_PRELOAD=/usr/lib/libstdc++.so
 

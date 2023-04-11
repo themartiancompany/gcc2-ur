@@ -30,6 +30,7 @@ pkgname = gcc7
 	depends = gcc7-libs=7.5.0-4
 	depends = binutils>=2.28
 	depends = libmpc
+	provides = gcc
 	options = !emptydirs
 	options = !lto
 	options = staticlibs
