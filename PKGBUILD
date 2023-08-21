@@ -6,30 +6,49 @@
 # Contributor: Allan McRae <allan@archlinux.org>
 # Contributor: Pellegrino Prevete <pellegrinoprevete@gmail.com>
 
-# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+# toolchain build order:
+# linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgbase=gcc7
-pkgname=(gcc7 gcc7-libs gcc7-fortran)
+pkgname=(
+  gcc7
+  gcc7-libs
+  gcc7-fortran
+)
 pkgver=7.5.0
 _pkgver=7
 _majorver=${pkgver:0:1}
 _islver=0.18
-pkgrel=4
+pkgrel=5
 pkgdesc='The GNU Compiler Collection (7.x.x)'
 arch=(x86_64)
-license=(GPL LGPL FDL custom)
+license=(
+  GPL
+  LGPL
+  FDL
+  custom
+)
 url='http://gcc.gnu.org'
-makedepends=(binutils libmpc doxygen python subversion flex)
+makedepends=(
+  binutils
+  libmpc
+  doxygen
+  python
+  subversion
+  flex)
 options=(!emptydirs !lto)
-source=(https://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.xz
-        https://gcc.gnu.org/pub/gcc/infrastructure/isl-${_islver}.tar.bz2
-        bz84080.patch
-        libsanitizer.patch)
-sha256sums=('b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661'
-            '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
-            'bce05807443558db55f0d6b4dae37a678ea1bb3388b541c876fe3d110e3717e7'
-            'ee25895428a9dbd3217de109a043c54cb9f51e6a04a260be088a619c0f677e68')
+source=(
+  https://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.xz
+  https://gcc.gnu.org/pub/gcc/infrastructure/isl-${_islver}.tar.bz2
+  bz84080.patch
+  libsanitizer.patch)
+sha256sums=(
+  'b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661'
+  '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
+  'bce05807443558db55f0d6b4dae37a678ea1bb3388b541c876fe3d110e3717e7'
+  'ee25895428a9dbd3217de109a043c54cb9f51e6a04a260be088a619c0f677e68'
+)
 
 _svnrev=266882
 _svnurl=svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
@@ -79,6 +98,44 @@ prepare() {
 }
 
 build() {
+  local _configure \
+	_configure_options=() \
+	_option
+  _configure="${srcdir}/gcc/configure"
+  _configure_options=(
+    --prefix=/usr
+    --libdir=/usr/lib
+    --libexecdir=/usr/lib
+    --mandir=/usr/share/man
+    --infodir=/usr/share/info
+    --with-bugurl=https://bugs.archlinux.org/
+    --enable-languages=c,c++,fortran,lto
+    --disable-multilib
+    --enable-shared
+    --enable-threads=posix
+    --enable-libmpx
+    --with-system-zlib
+    --with-isl
+    --enable-__cxa_atexit
+    --disable-libunwind-exceptions
+    --enable-clocale=gnu
+    --disable-libstdcxx-pch
+    --disable-libssp
+    --enable-gnu-unique-object
+    --enable-linker-build-id
+    --enable-lto
+    --enable-plugin
+    --enable-install-libiberty
+    --with-linker-hash-style=gnu
+    --enable-gnu-indirect-function
+    --disable-werror
+    --enable-checking=release
+    --enable-default-pie
+    --enable-default-ssp
+    --program-suffix="-${_pkgver}"
+    --enable-version-specific-runtime-libs
+  )
+
   export LD_PRELOAD=/usr/lib/libstdc++.so
 
   cd gcc-build
@@ -87,53 +144,28 @@ build() {
   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
   # -Werror=format-security causes compilation errors with GCC>10
   # And protection flags leave libgcc unusable
-  banned_compile_options=("-pipe" "-Werror=format-security" "-fstack-clash-protection" "-fcf-protection")
+  banned_compile_options=(
+    "-pipe"
+    "-Werror=format-security"
+    "-fstack-clash-protection"
+    "-fcf-protection")
 
-  for option in "${banned_compile_options[@]}"
+  for _option in "${banned_compile_options[@]}"
   do
-    CFLAGS=${CFLAGS/$option/}
-    CXXFLAGS=${CXXFLAGS/$option/}
+    CFLAGS=${CFLAGS/${_option}/}
+    CXXFLAGS=${CXXFLAGS/${_option}/}
   done
 
-  "$srcdir/gcc/configure" --prefix=/usr \
-      --libdir=/usr/lib \
-      --libexecdir=/usr/lib \
-      --mandir=/usr/share/man \
-      --infodir=/usr/share/info \
-      --with-bugurl=https://bugs.archlinux.org/ \
-      --enable-languages=c,c++,fortran,lto \
-      --disable-multilib \
-      --enable-shared \
-      --enable-threads=posix \
-      --enable-libmpx \
-      --with-system-zlib \
-      --with-isl \
-      --enable-__cxa_atexit \
-      --disable-libunwind-exceptions \
-      --enable-clocale=gnu \
-      --disable-libstdcxx-pch \
-      --disable-libssp \
-      --enable-gnu-unique-object \
-      --enable-linker-build-id \
-      --enable-lto \
-      --enable-plugin \
-      --enable-install-libiberty \
-      --with-linker-hash-style=gnu \
-      --enable-gnu-indirect-function \
-      --disable-werror \
-      --enable-checking=release \
-      --enable-default-pie \
-      --enable-default-ssp \
-      --program-suffix=-${_pkgver} \
-      --enable-version-specific-runtime-libs
-
+  "${_configure}" "${_configur_options[@]}"
   make
 
   # make documentation
-  make -C $CHOST/libstdc++-v3/doc doc-man-doxygen
+  make -C "${CHOST}/libstdc++-v3/doc" \
+	  "doc-man-doxygen"
 }
 
 package_gcc7-libs() {
+  local _lib
   pkgdesc='Runtime libraries shipped by GCC (7.x.x)'
   depends=('glibc>=2.27')
   options+=(!strip)
@@ -141,106 +173,169 @@ package_gcc7-libs() {
   export LD_PRELOAD=/usr/lib/libstdc++.so
 
   cd gcc-build
-  make -C $CHOST/libgcc DESTDIR="$pkgdir" install-shared
-  rm -f "$pkgdir/$_libdir/libgcc_eh.a"
-  mv "$pkgdir"/usr/lib/gcc/$CHOST/lib/libgcc_s.so* "$pkgdir"/$_libdir
+  make -C "${CHOST}/libgcc" \
+	  DESTDIR="${pkgdir}" install-shared
+  rm -f "${pkgdir}/${_libdir}/libgcc_eh.a"
+  mv "${pkgdir}/usr/lib/gcc/${CHOST}/lib/libgcc_s.so"* "${pkgdir}/${_libdir}"
 
-  for lib in libatomic \
-             libcilkrts \
-             libgfortran \
-             libgomp \
-             libitm \
-             libquadmath \
-             libsanitizer/{a,l,ub,t}san \
-             libstdc++-v3/src \
-             libvtv; do
-    make -C $CHOST/$lib DESTDIR="$pkgdir" install-toolexeclibLTLIBRARIES
+  for _lib in libatomic \
+              libcilkrts \
+              libgfortran \
+              libgomp \
+              libitm \
+              libquadmath \
+              libsanitizer/{a,l,ub,t}san \
+              libstdc++-v3/src \
+              libvtv; do
+    make -C "${CHOST}/${lib}" \
+	    DESTDIR="${pkgdir}" \
+	    install-toolexeclibLTLIBRARIES
   done
 
-  make -C $CHOST/libmpx DESTDIR="$pkgdir" install
-  rm -f "$pkgdir"/$_libdir/libmpx.spec
+  make -C "${CHOST}/libmpx" \
+	  DESTDIR="${pkgdir}" install
+  rm -f "$pkgdir/${_libdir}/libmpx.spec"
 
   # Install Runtime Library Exception
-  install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
-    "$pkgdir/usr/share/licenses/gcc7-libs/RUNTIME.LIBRARY.EXCEPTION"
+  install -Dm644 "${srcdir}/gcc/COPYING.RUNTIME" \
+    "${pkgdir}/usr/share/licenses/gcc7-libs/RUNTIME.LIBRARY.EXCEPTION"
 }
 
 package_gcc7() {
   pkgdesc="The GNU Compiler Collection - C and C++ frontends (7.x.x)"
   depends=("gcc7-libs=$pkgver-$pkgrel" 'binutils>=2.28' libmpc)
   options+=(staticlibs)
-  provides=("gcc")
+  provides=(
+    "gcc=${pkgver}"
+  )
 
   export LD_PRELOAD=/usr/lib/libstdc++.so
 
   cd gcc-build
 
-  make -C gcc DESTDIR="$pkgdir" install-driver install-cpp install-gcc-ar \
-    c++.install-common install-headers install-plugin install-lto-wrapper
+  make -C gcc DESTDIR="${pkgdir}" \
+	      install-driver \
+	      install-cpp \
+	      install-gcc-ar \
+              c++.install-common \
+	      install-headers \
+	      install-plugin \
+	      install-lto-wrapper
 
-  install -m755 -t "$pkgdir/${_libdir}/" gcc/{cc1,cc1plus,collect2,lto1}
+  install -m755 \
+	  -t "${pkgdir}/${_libdir}/" \
+	  "gcc/"{cc1,cc1plus,collect2,lto1}
 
-  make -C $CHOST/libgcc DESTDIR="$pkgdir" install
-  rm -rf "$pkgdir"/usr/lib/gcc/$CHOST/lib*
+  make -C "${CHOST}/libgcc" \
+	  DESTDIR="${pkgdir}" \
+	  install
+  rm -rf "${pkgdir}/usr/lib/gcc/${CHOST}/lib"*
 
-  make -C $CHOST/libstdc++-v3/src DESTDIR="$pkgdir" install
-  make -C $CHOST/libstdc++-v3/include DESTDIR="$pkgdir" install
-  make -C $CHOST/libstdc++-v3/libsupc++ DESTDIR="$pkgdir" install
-  make -C $CHOST/libstdc++-v3/python DESTDIR="$pkgdir" install
+  make -C "${CHOST}/libstdc++-v3/src" \
+       DESTDIR="${pkgdir}" \
+       install
+  make -C "${CHOST}/libstdc++-v3/include" \
+       DESTDIR="${pkgdir}" \
+       install
+  make -C "${CHOST}/libstdc++-v3/libsupc++" \
+       DESTDIR="${pkgdir}" \
+       install
+  make -C "${CHOST}/libstdc++-v3/python" \
+       DESTDIR="${pkgdir}" \
+       install
 
-  make DESTDIR="$pkgdir" install-libcc1
-  mv "$pkgdir"/usr/lib/libcc1.so* "$pkgdir"/${_libdir}
-  rm -f "$pkgdir"/${_libdir}/libstdc++.so*
+  make DESTDIR="${pkgdir}" \
+       install-libcc1
+  mv "${pkgdir}/usr/lib/libcc1.so"* \
+     "${pkgdir}/${_libdir}"
+  rm -f "${pkgdir}/${_libdir}/libstdc++.so"*
 
-  make DESTDIR="$pkgdir" install-fixincludes
-  make -C gcc DESTDIR="$pkgdir" install-mkheaders
-  make -C lto-plugin DESTDIR="$pkgdir" install
+  make DESTDIR="${pkgdir}" \
+       install-fixincludes
+  make -C gcc \
+       DESTDIR="${pkgdir}" \
+       install-mkheaders
+  make -C lto-plugin \
+       DESTDIR="${pkgdir}" \
+       install
 
-  make -C $CHOST/libcilkrts DESTDIR="$pkgdir" install-nodist_{toolexeclib,cilkinclude}HEADERS
-  make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_{libsubinclude,toolexeclib}HEADERS
-  make -C $CHOST/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  make -C $CHOST/libquadmath DESTDIR="$pkgdir" install-nodist_libsubincludeHEADERS
-  make -C $CHOST/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
-  make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
-  make -C $CHOST/libmpx DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+  make -C "${CHOST}/libcilkrts" \
+       DESTDIR="${pkgdir}" \
+       "install-nodist_"{toolexeclib,cilkinclude}"HEADERS"
+  make -C "${CHOST}/libgomp" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_"{libsubinclude,toolexeclib}"HEADERS"
+  make -C "${CHOST}/libitm" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_toolexeclibHEADERS"
+  make -C "${CHOST}/libquadmath" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_libsubincludeHEADERS"
+  make -C "${CHOST}/libsanitizer" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_"{saninclude,toolexeclib}"HEADERS"
+  make -C "${CHOST}/libsanitizer/asan" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_toolexeclibHEADERS"
+  make -C "${CHOST}/libmpx" \
+	  DESTDIR="${pkgdir}" \
+	  "install-nodist_toolexeclibHEADERS"
 
-  make -C libcpp DESTDIR="$pkgdir" install
+  make -C libcpp \
+       DESTDIR="${pkgdir}" \
+       install
 
   # many packages expect this symlink
-  ln -s gcc-7 "$pkgdir"/usr/bin/cc-7
+  ln -s gcc-7 "${pkgdir}/usr/bin/cc-7"
 
-  rm -f "$pkgdir"/$_libdir/lib{stdc++,gcc_s}.so
+  rm -f "${pkgdir}/${_libdir}/lib"{stdc++,gcc_s}".so"
 
   # byte-compile python libraries
-  python -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
-  python -O -m compileall "$pkgdir/usr/share/gcc-${pkgver%%+*}/"
+  python -m compileall \
+	 "${pkgdir}/usr/share/gcc-${pkgver%%+*}/"
+  python -O \
+	 -m compileall \
+	 "${pkgdir}/usr/share/gcc-${pkgver%%+*}/"
 
   # Install Runtime Library Exception
-  install -d "$pkgdir/usr/share/licenses/$pkgname/"
-  ln -s /usr/share/licenses/gcc7-libs/RUNTIME.LIBRARY.EXCEPTION \
-    "$pkgdir/usr/share/licenses/$pkgname/"
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}/"
+  ln -s "/usr/share/licenses/gcc7-libs/RUNTIME.LIBRARY.EXCEPTION" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/"
 
   # Remove conflicting files
-  rm -rf "$pkgdir"/usr/share/locale
+  rm -rf "${pkgdir}/usr/share/locale"
 }
 
 package_gcc7-fortran() {
   pkgdesc="Fortran front-end for GCC (7.x.x)"
-  depends=("gcc7=$pkgver-$pkgrel")
+  depends=("gcc7=${pkgver}-${pkgrel}")
   options=('!emptydirs')
+  provides=("gcc-fortran=${pkgver}")
 
   export LD_PRELOAD=/usr/lib/libstdc++.so
 
   cd gcc-build
-  make -C $CHOST/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
-    install-{toolexeclibDATA,nodist_fincludeHEADERS}
-  make -C $CHOST/libgomp DESTDIR=$pkgdir install-nodist_fincludeHEADERS
-  make -C gcc DESTDIR=$pkgdir fortran.install-common
-  install -Dm755 gcc/f951 $pkgdir/${_libdir}/f951
+  make -C "${CHOST}/libgfortran" \
+	  DESTDIR="${pkgdir}" \
+	  install-cafexeclibLTLIBRARIES \
+          "install-"{toolexeclibDATA,nodist_fincludeHEADERS}
+  make -C "${CHOST}/libgomp" \
+       DESTDIR="${pkgdir}" \
+       install-nodist_fincludeHEADERS
+  make -C gcc \
+       DESTDIR="${pkgdir}" \
+       fortran.install-common
+  install -Dm755 \
+	  gcc/f951 \
+	  "${pkgdir}/${_libdir}/f951"
 
-  ln -s gfortran-7 ${pkgdir}/usr/bin/f95-${_pkgver}
+  ln -s gfortran-7 \
+	"${pkgdir}/usr/bin/f95-${_pkgver}"
 
   # Install Runtime Library Exception
-  install -d ${pkgdir}/usr/share/licenses/$pkgname
-  ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/$pkgname/
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  ln -s "../gcc-libs/RUNTIME.LIBRARY.EXCEPTION" \
+	"${pkgdir}/usr/share/licenses/$pkgname/"
 }
+
+# vim:set sw=2 sts=-1 et:
