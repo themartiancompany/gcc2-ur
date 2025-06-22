@@ -151,17 +151,17 @@ sha256sums=(
   'ee25895428a9dbd3217de109a043c54cb9f51e6a04a260be088a619c0f677e68'
 )
 if [[ "${_evmfs}" == "true" ]]; then
-validpgpkeys=(
-  # Truocolo
-  #   <truocolo@aol.com>
-  '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
-  #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
-  'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
-  # Pellegrino Prevete (dvorak)
-  #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
-  '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
-)
-
+  validpgpkeys=(
+    # Truocolo
+    #   <truocolo@aol.com>
+    '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
+    #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+    'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
+    # Pellegrino Prevete (dvorak)
+    #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+    '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
+  )
+fi
 _svnrev=266882
 _svn_ns="svn"
 _svnurl="svn://${_domain}/${_svn_ns}/${_pkg}/branches/${_pkg}-${_majorver}-branch"
@@ -203,6 +203,19 @@ snapshot() {
   echo \
     "pkgver=${_pkgver/-/+}"
 }
+
+_usr_get() {
+  local \
+    _bin
+  _bin="$( \
+    dirname \
+      "$(command \
+           -v \
+	   "env")")"
+  dirname \
+    "${_bin}"
+}
+
 
 prepare() {
   if [[ ! -d "${_pkg}" ]]; then
@@ -319,17 +332,6 @@ build() {
   fi
 }
 
-_usr_get() {
-  local \
-    _bin
-  _bin="$( \
-    dirname \
-      "$(command \
-           -v \
-	   "env")")"
-  dirname \
-    "${_bin}"
-}
 
 package_gcc7-libs() {
   local \
@@ -421,7 +423,6 @@ package_gcc7() {
   )
   export \
     LD_PRELOAD="/usr/lib/libstdc++.so"
-
   cd \
     "${_pkg}-build"
   make \
