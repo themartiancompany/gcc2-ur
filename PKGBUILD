@@ -57,6 +57,18 @@
 #   libtool requires rebuilt
 #   with each new gcc version
 
+_evmfs_available="$( \
+  command \
+    -v \
+    "evmfs" || \
+    true)"
+if [[ ! -v "_evmfs" ]]; then
+  if [[ "${_evmfs_available}" != "" ]]; then
+    _evmfs="true"
+  elif [[ "${_evmfs_available}" == "" ]]; then
+    _evmfs="false"
+  fi
+fi
 _os="$( \
   uname \
     -o)"
@@ -138,6 +150,18 @@ sha256sums=(
   'bce05807443558db55f0d6b4dae37a678ea1bb3388b541c876fe3d110e3717e7'
   'ee25895428a9dbd3217de109a043c54cb9f51e6a04a260be088a619c0f677e68'
 )
+if [[ "${_evmfs}" == "true" ]]; then
+validpgpkeys=(
+  # Truocolo
+  #   <truocolo@aol.com>
+  '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
+  #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+  'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
+  # Pellegrino Prevete (dvorak)
+  #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+  '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
+)
+
 _svnrev=266882
 _svn_ns="svn"
 _svnurl="svn://${_domain}/${_svn_ns}/${_pkg}/branches/${_pkg}-${_majorver}-branch"
