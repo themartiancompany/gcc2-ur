@@ -169,7 +169,13 @@ fi
 _svnrev=266882
 _svn_ns="svn"
 _svnurl="svn://${_domain}/${_svn_ns}/${_pkg}/branches/${_pkg}-${_majorver}-branch"
-_libdir="usr/lib/${_pkg}/${CHOST}/${pkgver%%+*}"
+_arch="$( \
+  uname \
+    -m)"
+if [[ "${_arch}" == "arm" ]]; then
+  _arch="armv7l"
+fi
+_libdir="usr/lib/${_pkg}/${_arch}/${pkgver%%+*}"
 
 snapshot() {
   local \
