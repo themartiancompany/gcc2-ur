@@ -216,7 +216,6 @@ _usr_get() {
     "${_bin}"
 }
 
-
 prepare() {
   if [[ ! -d "${_pkg}" ]]; then
     ln \
@@ -331,7 +330,6 @@ build() {
       "doc-man-doxygen"
   fi
 }
-
 
 package_gcc7-libs() {
   local \
