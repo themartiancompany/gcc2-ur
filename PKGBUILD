@@ -353,6 +353,7 @@ package_gcc7-libs() {
     _libc_depends \
     _os \
     _pkgdesc=()
+  _libc_depends=""
   _os="$( \
     uname \
       -o)"
