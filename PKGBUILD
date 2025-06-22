@@ -370,6 +370,7 @@ package_gcc7-libs() {
   depends=(
     "${_libc_depends}"
   )
+  echo "${depends[*]}"
   options+=(
     "!strip"
   )
@@ -432,6 +433,7 @@ package_gcc7() {
     'binutils>=2.28'
     "libmpc"
   )
+  echo "${depends[*]}"
   options+=(
     "staticlibs"
   )
@@ -593,10 +595,14 @@ package_gcc7-fortran() {
   depends=(
     "${pkgbase}=${pkgver}-${pkgrel}"
   )
+  echo "depends: ${depends[*]}"
   options=(
     '!emptydirs'
   )
   provides=(
+    "${_pkg}-fortran=${pkgver}"
+  )
+  conflicts=(
     "${_pkg}-fortran=${pkgver}"
   )
   export \
