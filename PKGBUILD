@@ -325,7 +325,6 @@ package_gcc7-libs() {
     depends=(
       "${_libc_depends}"
     )
-  fi
   options+=(
     "!strip"
   )
