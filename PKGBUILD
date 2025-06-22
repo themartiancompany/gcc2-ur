@@ -364,15 +364,13 @@ package_gcc7-libs() {
   )
   pkgdesc="${_pkgdesc[*]}"
   if [[ "${_os}" == "GNU/Linux" ]]; then
-    _libc_depends="${_libc}>=${_libc_ver}"
-  elif [[ "${_os}" == "Android" ]]; then
-    _libc_depends="${_libc}"
-  fi
-  if [[ -v "${_libc_depends}" ]]; then
-    echo "libc depends: ${_libc_depends}"
     depends=(
-      "${_libc_depends}"
-    )                     
+      "${_libc}>=${_libc_ver}"
+    )
+  elif [[ "${_os}" == "Android" ]]; then
+    depends=(
+      "${_libc}"
+    )
   fi
   echo "${depends[*]}"
   options+=(
