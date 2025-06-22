@@ -120,6 +120,7 @@ _domain="${_pkg}.${_proj}.org"
 _http="https://${_domain}"
 url="${_http}"
 depends=(
+  "${_libc}"
 )
 makedepends=(
   'binutils'
