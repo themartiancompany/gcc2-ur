@@ -119,9 +119,12 @@ license=(
 _domain="${_pkg}.${_proj}.org"
 _http="https://${_domain}"
 url="${_http}"
+depends=(
+)
 makedepends=(
   'binutils'
   'libmpc'
+  "make"
   "${_py}"
   'subversion'
   'flex'
@@ -335,7 +338,11 @@ package_gcc7-libs() {
   local \
     _lib \
     _libc_depends \
+    _os \
     _pkgdesc=()
+  _os="$( \
+    uname \
+      -o)"
   _pkgdesc=(
     'Runtime libraries'
     'shipped by GCC (7.x.x)'
@@ -346,9 +353,9 @@ package_gcc7-libs() {
   elif [[ "${_os}" == "Android" ]]; then
     _libc_depends="${_libc}"
   fi
-    depends=(
-      "${_libc_depends}"
-    )
+  depends=(
+    "${_libc_depends}"
+  )
   options+=(
     "!strip"
   )
