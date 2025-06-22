@@ -78,6 +78,7 @@ elif [[ "${_os}" == "GNU/Linux" ]]; then
   _libc="glibc"
   _libc_ver="2.27"
 fi
+echo "${_libc}"
 if [[ ! -v "_docs" ]]; then
   _docs="false"
 fi
@@ -122,6 +123,7 @@ url="${_http}"
 depends=(
   "${_libc}"
 )
+echo "depends: ${depends[*]}"
 makedepends=(
   'binutils'
   'libmpc'
