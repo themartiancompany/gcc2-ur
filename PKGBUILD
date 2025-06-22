@@ -175,7 +175,7 @@ _arch="$( \
 if [[ "${_arch}" == "arm" ]]; then
   _arch="armv7l"
 else
-  if [[ -v "CARCH" ]]; 
+  if [[ -v "CARCH" ]]; then
     _arch="${CARCH}"
   fi
 fi
