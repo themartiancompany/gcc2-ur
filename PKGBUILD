@@ -122,7 +122,6 @@ url="${_http}"
 depends=(
   "${_libc}"
 )
-echo "depends: ${depends[*]}"
 makedepends=(
   'binutils'
   'libmpc'
@@ -369,8 +368,8 @@ package_gcc7-libs() {
   elif [[ "${_os}" == "Android" ]]; then
     _libc_depends="${_libc}"
   fi
-  echo "libc depends: ${_libc_depends}"
   if [[ -v "${_libc_depends}" ]]; then
+    echo "libc depends: ${_libc_depends}"
     depends=(
       "${_libc_depends}"  fi
     )                     
