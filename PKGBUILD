@@ -174,6 +174,8 @@ _arch="$( \
     -m)"
 if [[ "${_arch}" == "arm" ]]; then
   _arch="armv7l"
+else
+  _arch="${CARCH}"
 fi
 _libdir="usr/lib/${_pkg}/${_arch}/${pkgver%%+*}"
 
