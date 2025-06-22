@@ -78,7 +78,6 @@ elif [[ "${_os}" == "GNU/Linux" ]]; then
   _libc="glibc"
   _libc_ver="2.27"
 fi
-echo "${_libc}"
 if [[ ! -v "_docs" ]]; then
   _docs="false"
 fi
@@ -233,6 +232,9 @@ _usr_get() {
 }
 
 prepare() {
+  depends=(
+    "${_libc}"
+  )
   if [[ ! -d "${_pkg}" ]]; then
     ln \
       -s \
@@ -367,9 +369,12 @@ package_gcc7-libs() {
   elif [[ "${_os}" == "Android" ]]; then
     _libc_depends="${_libc}"
   fi
-  depends=(
-    "${_libc_depends}"
-  )
+  echo "libc depends: ${_libc_depends}"
+  if [[ -v "${_libc_depends}" ]]; then
+    depends=(
+      "${_libc_depends}"  fi
+    )                     
+  fi
   echo "${depends[*]}"
   options+=(
     "!strip"
