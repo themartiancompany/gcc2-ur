@@ -371,7 +371,7 @@ package_gcc7-libs() {
   if [[ -v "${_libc_depends}" ]]; then
     echo "libc depends: ${_libc_depends}"
     depends=(
-      "${_libc_depends}"  fi
+      "${_libc_depends}"
     )                     
   fi
   echo "${depends[*]}"
