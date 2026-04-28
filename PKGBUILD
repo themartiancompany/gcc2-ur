@@ -19,30 +19,24 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Maintainer:
+# Maintainers:
 #   Truocolo
 #     <truocolo@aol.com>
 #     <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
-# Maintainer:
 #   Pellegrino Prevete (dvorak)
 #     <pellegrinoprevete@gmail.com>
 #     <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
-# Maintainer:
+# Contributors:
 #   David (ReyJamonico)
 #     < david at rjamo dot dev >
-# Contributor:
 #   Viktor Drobot (aka dviktor)
 #     linux776 [at] gmail [dot] com
-# Contributor:
 #   Sven-Hendrik Haase
 #     <svenstaro@gmail.com>
-# Contributor:
 #   Konstantin Gizdov
 #     <arch@kge.pw>
-# Contributor:
 #   Bartłomiej Piotrowski
 #     <bpiotrowski@archlinux.org>
-# Contributor:
 #   Allan McRae
 #     <allan@archlinux.org>
 
