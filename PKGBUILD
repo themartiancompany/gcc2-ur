@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0
 
 #    ----------------------------------------------------------------------
-#    Copyright © 2023, 2024, 2025  Pellegrino Prevete
+#    Copyright © 2023, 2024, 2025, 2026  Pellegrino Prevete
 #
 #    All rights reserved
 #    ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ fi
 _py="python"
 _proj="gnu"
 _pkg=gcc
-_majver=7
+_majver=2
 pkgbase="${_pkg}${_majver}"
 pkgname=(
   "${pkgbase}"
@@ -96,13 +96,13 @@ if [[ "${_docs}" == "true" ]]; then
     "${pkgbase}-docs"
   )
 fi
-pkgver="${_majver}.5.0"
+pkgver="${_majver}.95"
 _pkgver="${_majver}"
 _majorver=${pkgver:0:1}
 _islver=0.18
 pkgrel=5
 _pkgdesc=(
-  'The GNU Compiler Collection (7.x.x)'
+  'The GNU Compiler Collection (2.x.x)'
 )
 pkgdesc="${_pkgdesc[*]}"
 arch=(
@@ -142,6 +142,7 @@ options=(
 _ns="pub"
 _url="${_http}/${_ns}/${_pkg}"
 _tarname="${_pkg}-${pkgver}"
+_bundle_sum="b607bb7232c2ede1ae1d3745b464c1c073f64171e592a363396849c3d45ab887"
 source=(
   "${_url}/releases/${_tarname}/${_tarname}.tar.xz"
   "${_url}/infrastructure/isl-${_islver}.tar.bz2"
@@ -646,3 +647,4 @@ package_gcc7-fortran() {
 }
 
 # vim:set sw=2 sts=-1 et:
+1b7b40ecd8afa05a087fe4e90de912b5ae6754f7ea15b2b1fb2f9e734a770c8c  gcc-2.95.bundle.sig
