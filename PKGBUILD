@@ -143,6 +143,7 @@ _ns="pub"
 _url="${_http}/${_ns}/${_pkg}"
 _tarname="${_pkg}-${pkgver}"
 _bundle_sum="b607bb7232c2ede1ae1d3745b464c1c073f64171e592a363396849c3d45ab887"
+_bundle_sig_sum="1b7b40ecd8afa05a087fe4e90de912b5ae6754f7ea15b2b1fb2f9e734a770c8c"
 source=(
   "${_url}/releases/${_tarname}/${_tarname}.tar.xz"
   "${_url}/infrastructure/isl-${_islver}.tar.bz2"
@@ -647,4 +648,3 @@ package_gcc7-fortran() {
 }
 
 # vim:set sw=2 sts=-1 et:
-1b7b40ecd8afa05a087fe4e90de912b5ae6754f7ea15b2b1fb2f9e734a770c8c  gcc-2.95.bundle.sig
