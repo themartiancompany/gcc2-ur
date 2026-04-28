@@ -19,7 +19,7 @@
 [comment]: <> (License along with this program.)
 [comment]: <> (If not, see <https://www.gnu.org/licenses/>.)
 
-# `gcc7`
+# `gcc2`
 
 universal recipe for
 [user repo](
