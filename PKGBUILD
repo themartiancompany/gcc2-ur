@@ -138,6 +138,11 @@ _url="${_http}/${_ns}/${_pkg}"
 _tarname="${_pkg}-${pkgver}"
 _bundle_sum="b607bb7232c2ede1ae1d3745b464c1c073f64171e592a363396849c3d45ab887"
 _bundle_sig_sum="1b7b40ecd8afa05a087fe4e90de912b5ae6754f7ea15b2b1fb2f9e734a770c8c"
+# Tallero
+_evmfs_ns="0x6ec7cC56dCeC0a00CB15E97C64B1a5Ec7A31403c"
+_evmfs_network="100"
+_evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
+_evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
 source=(
   "${_url}/releases/${_tarname}/${_tarname}.tar.xz"
   "${_url}/infrastructure/isl-${_islver}.tar.bz2"
